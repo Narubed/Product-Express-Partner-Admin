@@ -27,7 +27,6 @@ import {
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
 import useCurrentUser from '../hooks/useCurrentUser';
-import ReceiveBarcode from '../components/pages/Dashboard/ReceiveBarcode';
 import SelectDetail from '../components/pages/Dashboard/SelectDetail';
 // sections
 import { ListHead, ListToolbar } from '../lib/tabel';
@@ -115,7 +114,9 @@ export default function UserPage() {
     const preOrders = await fetcherWithToken(urlOrder, {
       method: 'GET',
     }).then((json) => {
-      const filterStatus = json.data.filter((item) => item.po_status === 'ตัดรอบการจัดส่งแล้ว');
+      const filterStatus = json.data.filter(
+        (item) => item.po_status === 'สินค้าถึงสาขาปลายทางแล้ว' || item.po_status === 'ได้รับสินค้าแล้ว'
+      );
 
       return filterStatus;
     });
@@ -173,22 +174,14 @@ export default function UserPage() {
   return (
     <>
       <Helmet>
-        <title> Partners | NBADigitalservice </title>
+        <title> Receive | NBADigitalservice </title>
       </Helmet>
 
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            รายการที่ต้องได้รับทั้งหมด
+            รายการที่ได้รับแล้วทั้งหมด
           </Typography>
-          <ReceiveBarcode
-            isOrders={isOrders}
-            dispatch={dispatch}
-            setLoading={setLoading}
-            fetcherOrder={fetcherOrder}
-            fetcherWithToken={fetcherWithToken}
-            currentUser={currentUser}
-          />
         </Stack>
 
         <Card>
@@ -217,12 +210,6 @@ export default function UserPage() {
 
                         <TableCell align="left">{po_status}</TableCell>
                         <TableCell align="left">{po_member_address}</TableCell>
-
-                        {/*  <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
-
-                        <TableCell align="left">
-                          <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
-                        </TableCell> */}
 
                         <TableCell align="right">
                           <IconButton size="large" color="inherit" onClick={(event) => handleOpenMenu({ event, row })}>
