@@ -3,7 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
 
-import store from "./lib/store";
+import store from './lib/store';
 
 //
 import App from './App';
@@ -13,7 +13,7 @@ import reportWebVitals from './reportWebVitals';
 // ----------------------------------------------------------------------
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-
+if (process.env.NODE_ENV !== 'development') console.log = console.warn = console.error = () => {};
 root.render(
   <HelmetProvider>
     <BrowserRouter>
